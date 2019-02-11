@@ -43,7 +43,13 @@ This function should only modify configuration layer settings."
      ;; `M-m f e R' (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      ;; helm
-     chinese
+     (chinese
+      :config
+      (pyim-basedict-enable)
+      (setq pyim-default-scheme 'quanpin)
+      (setq pyim-page-length 5)
+      (setq pyim-page-tooltip 'posframe)
+      )
      ivy
      auto-completion
      better-defaults
@@ -72,6 +78,7 @@ This function should only modify configuration layer settings."
    dotspacemacs-additional-packages '(tramp
                                       ox-rst
                                       rainbow-delimiters
+
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -453,6 +460,7 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
+  (add-to-list 'load-path "~/.emacs.d/private/elisp/awesome-pair")
   )
 
 (defun dotspacemacs/user-load ()
@@ -472,10 +480,42 @@ before packages are loaded."
   (global-set-key (kbd "C-x g") 'magit-status)
   ;; Enable rainbow-delimiters-mode on prog-mode
   (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  
+  ;; pyim config
   (add-hook 'emacs-startup-hook #'(lambda () (pyim-restart-1 t)))
+  ;; projectile config
   (require 'projectile)
   (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  ;; awesome-paredit config
+  (require 'awesome-pair)
+  (dolist (hook (list
+                 'c-mode-common-hook
+                 'c-mode-hook
+                 'c++-mode-hook
+                 'java-mode-hook
+                 'haskell-mode-hook
+                 'emacs-lisp-mode-hook
+                 'lisp-interaction-mode-hook
+                 'lisp-mode-hook
+                 'maxima-mode-hook
+                 'ielm-mode-hook
+                 'sh-mode-hook
+                 'makefile-gmake-mode-hook
+                 'php-mode-hook
+                 'python-mode-hook
+                 'js-mode-hook
+                 'go-mode-hook
+                 'qml-mode-hook
+                 'jade-mode-hook
+                 'css-mode-hook
+                 'ruby-mode-hook
+                 'coffee-mode-hook
+                 'rust-mode-hook
+                 'qmake-mode-hook
+                 'lua-mode-hook
+                 'swift-mode-hook
+                 'minibuffer-inactive-mode-hook
+                 ))
+    (add-hook hook '(lambda () (awesome-pair-mode 1))))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -490,6 +530,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   (quote
+    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
  '(package-selected-packages
    (quote
     (vmd-mode smartparens mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji rainbow-delimiters yasnippet-snippets yapfify yaml-mode which-key wgrep use-package unfill toc-org spray smex smeargle pyvenv pytest pyim pyenv-mode py-isort pippel pipenv pip-requirements pcre2el pangu-spacing ox-rst overseer orgit org-present org-pomodoro org-mime org-download org-bullets org-brain nameless mwim magit-svn magit-gitflow macrostep live-py-mode ivy-yasnippet ivy-xref ivy-hydra importmagic htmlize hlint-refactor hindent helm-make haskell-snippets gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy flx find-by-pinyin-dired evil-org evil-magit elisp-slime-nav dotenv-mode diminish cython-mode counsel company-statistics company-ghci company-cabal company-anaconda cmm-mode chinese-conv bind-map auto-yasnippet auto-compile ace-pinyin ac-ispell))))
