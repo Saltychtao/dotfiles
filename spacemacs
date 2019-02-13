@@ -9,7 +9,7 @@ This function should only modify configuration layer settings."
    ;; Base distribution to use. This is a layer contained in the directory
    ;; `+distribution'. For now available distributions are `spacemacs-base'
    ;; or `spacemacs'. (default 'spacemacs)
-   dotspacemacs-distribution 'spacemacs-base
+   dotspacemacs-distribution 'spacemacs
 
    ;; Lazy installation of layers (i.e. layers are installed only when a file
    ;; with a supported type is opened). Possible values are `all', `unused'
@@ -64,7 +64,7 @@ This function should only modify configuration layer settings."
      ;;        shell-default-height 30
      ;;        shell-default-position 'bottom)
      ;; spell-checking
-     ;; syntax-checking
+     syntax-checking
      ;; version-control
      )
 
@@ -75,10 +75,10 @@ This function should only modify configuration layer settings."
    ;; To use a local version of a package, use the `:location' property:
    ;; '(your-package :location "~/path/to/your-package/")
    ;; Also include the dependencies as they will not be resolved automatically.
-   dotspacemacs-additional-packages '(tramp
+   dotspacemacs-additional-packages '(
                                       ox-rst
                                       rainbow-delimiters
-
+                                      py-autopep8
                                       )
 
    ;; A list of packages that cannot be updated.
@@ -94,7 +94,7 @@ This function should only modify configuration layer settings."
    ;; installs only the used packages but won't delete unused ones. `all'
    ;; installs *all* packages supported by Spacemacs and never uninstalls them.
    ;; (default is `used-only')
-   dotspacemacs-install-packages 'used-only))
+   dotspacemacs-install-packages 'used-but-keep-unused))
 
 (defun dotspacemacs/init ()
   "Initialization:
@@ -202,7 +202,7 @@ It should only modify the values of Spacemacs settings."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press `SPC T n' to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
+   dotspacemacs-themes '(spacemacs-light
                          spacemacs-light)
 
    ;; Set the theme for the Spaceline. Supported themes are `spacemacs',
@@ -343,7 +343,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil unicode symbols are displayed in the mode line.
    ;; If you use Emacs as a daemon and wants unicode characters only in GUI set
    ;; the value to quoted `display-graphic-p'. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
 
    ;; If non-nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
@@ -460,7 +460,6 @@ If you are unsure, try setting them in `dotspacemacs/user-config' first."
     '(("melpa-cn" . "http://mirrors.tuna.tsinghua.edu.cn/elpa/melpa/")
       ("org-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/org/")
       ("gnu-cn"   . "http://mirrors.tuna.tsinghua.edu.cn/elpa/gnu/")))
-  (add-to-list 'load-path "~/.emacs.d/private/elisp/awesome-pair")
   )
 
 (defun dotspacemacs/user-load ()
@@ -476,46 +475,11 @@ This function is called at the very end of Spacemacs startup, after layer
 configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
-  (setq tramp-default-method "ssh")
-  (global-set-key (kbd "C-x g") 'magit-status)
-  ;; Enable rainbow-delimiters-mode on prog-mode
-  (add-hook 'prog-mode-hook #'rainbow-delimiters-mode)
-  ;; pyim config
-  (add-hook 'emacs-startup-hook #'(lambda () (pyim-restart-1 t)))
-  ;; projectile config
-  (require 'projectile)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  ;; awesome-paredit config
-  (require 'awesome-pair)
-  (dolist (hook (list
-                 'c-mode-common-hook
-                 'c-mode-hook
-                 'c++-mode-hook
-                 'java-mode-hook
-                 'haskell-mode-hook
-                 'emacs-lisp-mode-hook
-                 'lisp-interaction-mode-hook
-                 'lisp-mode-hook
-                 'maxima-mode-hook
-                 'ielm-mode-hook
-                 'sh-mode-hook
-                 'makefile-gmake-mode-hook
-                 'php-mode-hook
-                 'python-mode-hook
-                 'js-mode-hook
-                 'go-mode-hook
-                 'qml-mode-hook
-                 'jade-mode-hook
-                 'css-mode-hook
-                 'ruby-mode-hook
-                 'coffee-mode-hook
-                 'rust-mode-hook
-                 'qmake-mode-hook
-                 'lua-mode-hook
-                 'swift-mode-hook
-                 'minibuffer-inactive-mode-hook
-                 ))
-    (add-hook hook '(lambda () (awesome-pair-mode 1))))
+  (setq powerline-default-separator 'arrow)
+  (spacemacs|diminish smartparens-mode)
+  (setq custom-file "~/projects/emacs/custom.el")
+  (when (file-exists-p custom-file)
+    (load custom-file))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
@@ -530,12 +494,9 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-safe-themes
-   (quote
-    ("fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" default)))
  '(package-selected-packages
    (quote
-    (vmd-mode smartparens mmm-mode markdown-toc markdown-mode gh-md emoji-cheat-sheet-plus company-emoji rainbow-delimiters yasnippet-snippets yapfify yaml-mode which-key wgrep use-package unfill toc-org spray smex smeargle pyvenv pytest pyim pyenv-mode py-isort pippel pipenv pip-requirements pcre2el pangu-spacing ox-rst overseer orgit org-present org-pomodoro org-mime org-download org-bullets org-brain nameless mwim magit-svn magit-gitflow macrostep live-py-mode ivy-yasnippet ivy-xref ivy-hydra importmagic htmlize hlint-refactor hindent helm-make haskell-snippets gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link fuzzy flx find-by-pinyin-dired evil-org evil-magit elisp-slime-nav dotenv-mode diminish cython-mode counsel company-statistics company-ghci company-cabal company-anaconda cmm-mode chinese-conv bind-map auto-yasnippet auto-compile ace-pinyin ac-ispell))))
+    (ws-butler writeroom-mode visual-fill-column winum volatile-highlights vi-tilde-fringe uuidgen treemacs-projectile treemacs ht pfuture symon string-inflection spaceline-all-the-icons spaceline powerline restart-emacs request popwin persp-mode password-generator paradox spinner org-projectile org-category-capture open-junk-file move-text lorem-ipsum link-hint ivy-purpose window-purpose imenu-list indent-guide hungry-delete hl-todo highlight-parentheses highlight-numbers parent-mode highlight-indentation google-translate golden-ratio flx-ido fill-column-indicator fancy-battery eyebrowse expand-region evil-visualstar evil-visual-mark-mode evil-unimpaired evil-tutor evil-surround evil-numbers evil-nerd-commenter evil-matchit evil-lisp-state evil-lion evil-indent-plus evil-iedit-state iedit evil-goggles evil-exchange evil-escape evil-ediff evil-cleverparens smartparens paredit evil-args evil-anzu anzu eval-sexp-fu editorconfig dumb-jump doom-modeline eldoc-eval shrink-path all-the-icons memoize define-word counsel-projectile column-enforce-mode clean-aindent-mode centered-cursor-mode auto-highlight-symbol aggressive-indent ace-window ace-link font-lock+ yasnippet-snippets yapfify yaml-mode which-key wgrep use-package unfill toc-org spray smex smeargle rainbow-delimiters pyvenv pytest pyim pyenv-mode py-isort py-autopep8 pippel pipenv pip-requirements pcre2el pangu-spacing ox-rst overseer orgit org-present org-pomodoro org-mime org-download org-bullets org-brain nameless mwim mmm-mode markdown-toc magit-svn magit-gitflow macrostep live-py-mode ivy-yasnippet ivy-xref ivy-hydra importmagic htmlize hlint-refactor hindent helm-make haskell-snippets gnuplot gitignore-templates gitignore-mode gitconfig-mode gitattributes-mode git-timemachine git-messenger git-link gh-md fuzzy flycheck-pos-tip flycheck-haskell flx find-by-pinyin-dired evil-org evil-magit elisp-slime-nav dotenv-mode diminish cython-mode counsel company-statistics company-ghci company-cabal company-anaconda cmm-mode chinese-conv bind-map auto-yasnippet auto-compile ace-pinyin ac-ispell))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
