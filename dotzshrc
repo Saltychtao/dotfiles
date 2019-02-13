@@ -9,7 +9,6 @@
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
-plugins=(git archlinux history python autojump)
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -71,6 +70,19 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+source ~/.xmodmap
+# added by Anaconda3 4.4.0 installer
+export PATH="/home/saltychtao/softwares/anaconda3/bin:/home/saltychtao/.local/bin:$PATH"
+export GOPATH=$HOME/projects/go:$HOME/projects/go/DisSys
+alias wifi="nmcli dev wifi"
+alias 10803="ssh lijh@114.212.189.241"
+alias 10802="ssh lijh@114.212.189.240"
+alias 10801="ssh lijh@114.212.189.239"
+alias 10804="ssh lijh@114.212.189.242"
+alias 237="ssh lijh@114.212.189.237"
+alias ti4="ssh lijh@210.28.132.173"
+alias ti5="ssh lijh@210.28.132.174"
+alias ti6="ssh lijh@210.28.132.175"
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -97,6 +109,3 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-export PATH="/home/saltychtao/softwares/anaconda3/bin":$PATH
-alias 10802="ssh lijh@114.212.189.240"
-xmodmap ~/.Xmodmap
